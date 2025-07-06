@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant - Random Loadout Generator</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/checkbox.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Jua&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oregano:ital@0;1&family=Rouge+Script&display=swap" rel="stylesheet">
+    <link rel="icon" href="images/Valorant_icon.webp" type="image">
+</head>
+<body>
+    <nav class="nav">
+            <h1>Valorant - Random Loadout Generator</h3>
+    </nav>
+    <section class="player_selection_step">
+        <div class="container">
+            <div class="header">
+                <h2>Welcome to the Random Loadout Generator!</h2>
+            </div>
+            <div class="player_input">
+                <p>Enter the names of the players below. You can have up to 5 players.</p>
+                <div>
+                    <label for="player1">Player 1</label>
+                    <input type="text" id="player1" placeholder="ShinyDuck" class="player_name">
+                </div>
+                <div>
+                    <label for="player2">Player 2</label>
+                    <input type="text" id="player2" placeholder="KILLER89" class="player_name">
+                </div>
+                <div>
+                    <label for="player3">Player 3</label>
+                    <input type="text" id="player3" placeholder="Potatoman1" class="player_name">
+                </div>
+                <div>
+                    <label for="player4">Player 4</label>
+                    <input type="text" id="player4" placeholder="ABCxyz" class="player_name">
+                </div>
+                <div>
+                    <label for="player5">Player 5</label>
+                    <input type="text" id="player5" placeholder="ChillBro" class="player_name">
+                </div>                                                
+            </div>
+            <p class="error hidden player_amount_error">You need at least 1 player to generate a loadout.</p>   
+            <div class="btn"id="next_btn">
+                <div class="animation_div"></div>
+                <span>Next</span>
+            </div>             
+        </div>
+
+    </section>
+    <section class="player1_agent_selection_step hidden">
+    </section>
+    <section class="summary_step hidden">
+        <div class="container">
+            <div class="header">
+                <h2>Summary</h2>
+            </div>
+
+            <div class="btn"id="generate_btn">
+                <div class="animation_div"></div>
+                <span>Generate</span>
+            </div>
+        </div>
+
+    </section>
+    <section class="generating_step hidden">
+        <div class="container">
+            <div class="loading">
+                <div class="loading_text">Generating...</div>
+                <div class="loading_animation">
+                    <div class="loading_animation_inner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="loadout_step hidden">
+        <div class="container">
+                <div class="btn"id="reset_btn">
+                    <div class="animation_div"></div>
+                    <span>Reset</span>
+                </div>
+                <div class="checkbox_container">
+                    <input type="checkbox" name="saveAgents" id="saveAgents" checked>
+                    <label for="saveAgents">Keep agents on reset</label>
+                </div>
+            <div class="header">
+                <h2>Here are your loadouts!</h2>
+            </div>
+            <div class="allLoadouts"></div>
+            <div class="displayLoadout"></div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <p>Created by Trajuin</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
