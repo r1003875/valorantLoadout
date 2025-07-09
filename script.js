@@ -101,14 +101,15 @@ let melee = new Weapon("melee", "Melee", "melee");
 let lightArmor = new Armor("light_armor", "Light Armor");
 let regenShield = new Armor("regen_shield", "Regen Shield");
 let heavyArmor = new Armor("heavy_armor", "Heavy Armor");
+let noneArmor = new Armor("none", "None");
 
-let armors = [lightArmor, regenShield, heavyArmor];
+let armors = [lightArmor, regenShield, heavyArmor, noneArmor];
 
 let players = [];
 
-function pickAgent() {
-    let randomIndex = Math.floor(Math.random() * selectedAgents.length);
-    return selectedAgents[randomIndex];
+function pickAgent(playerOwnedAgents) {
+    let randomIndex = Math.floor(Math.random() * playerOwnedAgents.length);
+    return playerOwnedAgents[randomIndex];
 }
 
 function pickPrimary() {
@@ -220,9 +221,10 @@ generateBtn.addEventListener("click", () => {
         setTimeout(() => {continueGeneration(chosenAgent, chosenPrimary, chosenSecondary, chosenArmor)}, 2000);
         }
         */
+    console.log(players);
     let chosenAgents = [];
     for(let i = 0; i < players.length; i++) {
-        let chosenAgent = pickAgent();
+        let chosenAgent = pickAgent(players[i].owned_agents);
         if(chosenAgents.some(agent => agent.name === chosenAgent.name)) {
             i--;
             continue;
@@ -336,9 +338,14 @@ nextBtn.addEventListener("click", () => {
         else if((players.every(player => player.name !== playerNames[i].value)) && !players.every(player => player.index !== i+1)){
             players.splice(i, 1, new Player(playerNames[i].value, i+1));
         }
+        /*
         else if(playerNames[i].value != "" && !players.every(player => player.index !== i+1)){
-            players.splice(i, 1);
+            //players.splice(i, 1);
+            console.log("3");
+            console.log("3");
+            console.log(players);
         }
+            */
     }
     if(players.length < 1) {
         document.querySelector(".player_amount_error").classList.remove("hidden");
@@ -348,23 +355,25 @@ nextBtn.addEventListener("click", () => {
         for(let i = 0; i < players.length; i++) {
             let containerDiv = document.createElement("div");
             if(i === 0) {
-                containerDiv.className = `container data-id="${i}"`;
+                containerDiv.className = `container`;
+                containerDiv.setAttribute(`data-id`, `${i}`)
                 containerDiv.setAttribute(`id`, `container${i}`);
             }
             else {
-                containerDiv.className = `container data-id="${i} hidden"`;
+                containerDiv.className = `container hidden`;
+                containerDiv.setAttribute(`data-id`, `${i}`);
                 containerDiv.setAttribute(`id`, `container${i}`);
             }
             containerDiv.innerHTML = `
                     <div class="mega_header">
-                        <div class="small_btn back_btn"id="back${i}_btn" data-id="${i}">
+                        <div class="small_btn back_btn" id="back${i}_btn" data-id="${i}">
                             <div class="small_animation_div"></div>
                             <span>Back</span>
                         </div>            
                         <div class="header">
                             <h2>${players[i].name}, choose your agents!</h2>
                         </div>
-                        <div class="small_btn proceed_btn"id="proceed${i}_btn" data-id="${i}">
+                        <div class="small_btn proceed_btn" id="proceed${i}_btn" data-id="${i}">
                             <div class="small_animation_div"></div>
                             <span>Next</span>
                         </div> 
@@ -412,7 +421,6 @@ nextBtn.addEventListener("click", () => {
                     document.querySelector(".player1_agent_selection_step").classList.add("hidden");
                     document.querySelector(".player1_agent_selection_step").innerHTML = "";
                     document.querySelector(".summary_step").classList.remove("hidden");
-                    console.log(players);
                 }
                 else {
                     document.querySelector(`#container${currentSelectedPlayer+1}`).classList.remove("hidden");
@@ -464,7 +472,6 @@ function  checkAgents(){
 
 /* ToDo:
 add ability generation
-add team generation
 
 
             let agentCheckboxes = document.querySelectorAll(`#container${i} .agent input[type='checkbox']`);
