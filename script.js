@@ -221,7 +221,6 @@ generateBtn.addEventListener("click", () => {
         setTimeout(() => {continueGeneration(chosenAgent, chosenPrimary, chosenSecondary, chosenArmor)}, 2000);
         }
         */
-    console.log(players);
     let chosenAgents = [];
     for(let i = 0; i < players.length; i++) {
         let chosenAgent = pickAgent(players[i].owned_agents);
@@ -335,23 +334,20 @@ nextBtn.addEventListener("click", () => {
         if(playerNames[i].value != "" && players.every(player => player.index !== i+1)){
             players.push(new Player(playerNames[i].value, i+1));
         }
-        else if((players.every(player => player.name !== playerNames[i].value)) && !players.every(player => player.index !== i+1)){
-            players.splice(i, 1, new Player(playerNames[i].value, i+1));
+        else if((players.every(player => player.name !== playerNames[i].value)) && playerNames[i].value != "" && !players.every(player => player.index !== i+1)){
+            players.splice(i, 1, new Player(playerNames[i].value, i+1));            
         }
-        /*
-        else if(playerNames[i].value != "" && !players.every(player => player.index !== i+1)){
-            //players.splice(i, 1);
-            console.log("3");
-            console.log("3");
-            console.log(players);
+        else if(playerNames[i].value == "" && !players.every(player => player.index != i+1)){
+            players.splice(i, 1);
         }
-            */
     }
+        console.log(players);
     if(players.length < 1) {
         document.querySelector(".player_amount_error").classList.remove("hidden");
         return;
     }
     else {
+        document.querySelector(".player_amount_error").classList.add("hidden");
         for(let i = 0; i < players.length; i++) {
             let containerDiv = document.createElement("div");
             if(i === 0) {
