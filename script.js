@@ -267,6 +267,8 @@ function resetLoadout() {
     //document.querySelector(".summary_step").innerHTML = "";
     currentSelectedPlayer = 0;
     highestSelectedPlayer = 0;
+    let summary = document.querySelector(".summary_step .header");
+    summary.innerHTML = `<h2>Summary</h2>`;
 }
 
 let resetBtn = document.querySelector("#reset_btn");
@@ -417,6 +419,25 @@ nextBtn.addEventListener("click", () => {
                     document.querySelector(".player1_agent_selection_step").classList.add("hidden");
                     document.querySelector(".player1_agent_selection_step").innerHTML = "";
                     document.querySelector(".summary_step").classList.remove("hidden");
+                    let summary = document.querySelector(".summary_step .header");
+                    for(let i = 0; i < players.length; i++) {
+                        let summaryDiv = document.createElement("div");
+                        summaryDiv.className = "summary_player";
+                        summaryDiv.innerHTML = `
+                            <h3 class="player_names_display">${players[i].name}</h3>
+                            <div class="agents"></div>
+                        `;
+                        summary.appendChild(summaryDiv);
+                        for(let j = 0; j < players[i].owned_agents.length; j++) {
+                            let agentDiv = document.createElement("article");
+                            agentDiv.className = "agent_small";
+                            agentDiv.innerHTML = `
+                                <div class="image_small" style="background-image:url(${players[i].owned_agents[j].image})"></div>
+                                <p class="name">${players[i].owned_agents[j].display_name}</p>
+                            `;
+                            summaryDiv.querySelector(".agents").appendChild(agentDiv);
+                        }
+                    }
                 }
                 else {
                     document.querySelector(`#container${currentSelectedPlayer+1}`).classList.remove("hidden");
