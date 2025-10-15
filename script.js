@@ -366,14 +366,16 @@ nextBtn.addEventListener("click", () => {
                     <div class="mega_header">
                         <div class="small_btn back_btn" id="back${i}_btn" data-id="${i}">
                             <div class="small_animation_div"></div>
-                            <span>Back</span>
+                            <span class="big_screen">Back</span>
+                            <span class="small_screen hidden"><</span>
                         </div>            
                         <div class="header">
                             <h2>${players[i].name}, choose your agents!</h2>
                         </div>
                         <div class="small_btn proceed_btn" id="proceed${i}_btn" data-id="${i}">
                             <div class="small_animation_div"></div>
-                            <span>Next</span>
+                            <span class="big_screen">Next</span>
+                            <span class="small_screen hidden">></span>
                         </div> 
                     </div>
                     <p class="error hidden agent_amount_error">You haven't selected any agents!</p>            
