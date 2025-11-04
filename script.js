@@ -64,12 +64,13 @@ let sage = new Agent("sage", "Sage");
 let skye = new Agent("skye", "Skye");
 let sova = new Agent("sova", "Sova");
 let tejo = new Agent("tejo", "Tejo");
+let veto = new Agent("veto", "Veto");
 let viper = new Agent("viper", "Viper");
 let vyse = new Agent("vyse", "Vyse");
 let waylay = new Agent("waylay", "Waylay");
 let yoru = new Agent("yoru", "Yoru");
 
-let agents = [astra, breach, brimstone, chamber, clove, cypher, deadlock, fade, gekko, harbor, iso, jett, kayo, killjoy, neon, omen, phoenix, raze, reyna, sage, skye, sova, tejo, viper, vyse, waylay, yoru];
+let agents = [astra, breach, brimstone, chamber, clove, cypher, deadlock, fade, gekko, harbor, iso, jett, kayo, killjoy, neon, omen, phoenix, raze, reyna, sage, skye, sova, tejo, veto, viper, vyse, waylay, yoru];
 let selectedAgents = agents.map(agent => agent);
 
 let ares = new Weapon("ares", "Ares", "primary");
