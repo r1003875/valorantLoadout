@@ -1,25 +1,22 @@
 class Agent {
-    constructor(name, display_name) {
+    constructor(name, image) {
         this.name = name;
-        this.image = `./images/agents/${name}.webp`;
-        this.display_name = display_name;
+        this.image = image;
     }
 }
 
 class Weapon {
-    constructor(name, display_name, type) {
+    constructor(name, image, type) {
         this.name = name;
-        this.image = `./images/weapons/${name}.webp`;
-        this.display_name = display_name;
-        this.type = type; // priamry or secondary
+        this.image = image;
+        this.type = type; // primary or secondary
     }
 }
 
 class Armor {
-    constructor(name, display_name) {
+    constructor(name, image) {
         this.name = name;
-        this.image = `./images/armor/${name}.webp`;
-        this.display_name = display_name;
+        this.image = image;
     }
 }
 
@@ -41,70 +38,85 @@ class Player {
     }
 }
 
-let astra = new Agent("astra", "Astra");
-let breach = new Agent("breach", "Breach");
-let brimstone = new Agent("brimstone", "Brimstone");
-let chamber = new Agent("chamber", "Chamber");
-let clove = new Agent("clove", "Clove");
-let cypher = new Agent("cypher", "Cypher");
-let deadlock = new Agent("deadlock", "Deadlock");
-let fade = new Agent("fade", "Fade");
-let gekko = new Agent("gekko", "Gekko");
-let harbor = new Agent("harbor", "Harbor");
-let iso = new Agent ("iso", "Iso");
-let jett = new Agent("jett", "Jett");
-let kayo = new Agent("kayo", "KAY/O");
-let killjoy = new Agent("killjoy", "Killjoy");
-let neon = new Agent("neon", "Neon");
-let omen = new Agent("omen", "Omen");
-let phoenix = new Agent("phoenix", "Phoenix");
-let raze = new Agent("raze", "Raze");
-let reyna = new Agent("reyna", "Reyna");
-let sage = new Agent("sage", "Sage");
-let skye = new Agent("skye", "Skye");
-let sova = new Agent("sova", "Sova");
-let tejo = new Agent("tejo", "Tejo");
-let veto = new Agent("veto", "Veto");
-let viper = new Agent("viper", "Viper");
-let vyse = new Agent("vyse", "Vyse");
-let waylay = new Agent("waylay", "Waylay");
-let yoru = new Agent("yoru", "Yoru");
+async function fetchAgents() {
+    const res = await fetch(
+        "https://valorant-api.com/v1/agents?isPlayableCharacter=true"
+    );
+    const json = await res.json();
+    return json.data;
+}
 
-let agents = [astra, breach, brimstone, chamber, clove, cypher, deadlock, fade, gekko, harbor, iso, jett, kayo, killjoy, neon, omen, phoenix, raze, reyna, sage, skye, sova, tejo, veto, viper, vyse, waylay, yoru];
+async function fetchWeapons() {
+    const res = await fetch(
+        "https://valorant-api.com/v1/weapons"
+    );
+    const json = await res.json();
+    return json.data;
+}
+
+async function fetchGear() {
+    const res = await fetch(
+        "https://valorant-api.com/v1/gear"
+    );
+    const json = await res.json();
+    return json.data;
+}
+console.log(fetchGear());
+console.log(fetchWeapons());
+let agents = [];
+async function initAgents() {
+    const agentData = await fetchAgents();
+
+    for (let i = 0; i < agentData.length; i++) {
+        let agent = new Agent(
+            agentData[i].displayName,
+            agentData[i].fullPortrait
+        );
+        agents.push(agent);
+    }
+
+}
+initAgents();
 let selectedAgents = agents.map(agent => agent);
 
-let ares = new Weapon("ares", "Ares", "primary");
-let bucky = new Weapon("bucky", "Bucky", "primary");
-let bulldog = new Weapon("bulldog", "Bulldog", "primary");
-let classic = new Weapon("classic", "Classic", "secondary");
-let frenzy = new Weapon("frenzy", "Frenzy", "secondary");
-let ghost = new Weapon("ghost", "Ghost", "secondary");
-let guardian = new Weapon("guardian", "Guardian", "primary");
-let judge = new Weapon("judge", "Judge", "primary");
-let marshal = new Weapon("marshal", "Marshal", "primary");
-let odin = new Weapon("odin", "Odin", "primary");
-let operator = new Weapon("operator", "Operator", "primary");
-let outlaw = new Weapon("outlaw", "Outlaw", "primary");
-let phantom = new Weapon("phantom", "Phantom", "primary");
-let sheriff = new Weapon("sheriff", "Sheriff", "secondary");
-let shorty = new Weapon("shorty", "Shorty", "secondary");
-let spectre = new Weapon("spectre", "Spectre", "primary");
-let stinger = new Weapon("stinger", "Stinger", "primary");
-let vandal = new Weapon("vandal", "Vandal", "primary");
 
-let none = new Weapon("none", "None", "none");
+let noneWeapons = new Weapon("None", 'images/weapons/none.webp' ,"none");
+let primaryWeapons = [noneWeapons];
+let secondaryWeapons = [noneWeapons];
+async function initWeapons() {
+    const weaponData = await fetchWeapons();
 
-let primaryWeapons = [ares, bucky, bulldog, guardian, judge, marshal, odin, operator, outlaw, phantom, spectre, stinger, vandal, none];
-let secondaryWeapons = [classic, frenzy, ghost, sheriff, shorty, none];
+    for (let i = 0; i < weaponData.length; i++) {
+        let weapon = new Weapon(
+            weaponData[i].displayName,
+            weaponData[i].displayIcon,
+            weaponData[i].category
+        );
+        if (weaponData[i].category === "EEquippableCategory::Sidearm") {
+            secondaryWeapons.push(weapon);
+        } else {
+            primaryWeapons.push(weapon);
+        }
+    }
 
-let melee = new Weapon("melee", "Melee", "melee");
+}
+initWeapons();
 
-let lightArmor = new Armor("light_armor", "Light Armor");
-let regenShield = new Armor("regen_shield", "Regen Shield");
-let heavyArmor = new Armor("heavy_armor", "Heavy Armor");
-let noneArmor = new Armor("none", "None");
+let noneArmor = new Armor("None", 'images/armor/none.webp');
+let armors = [noneArmor];
+async function initGear() {
+    const gearData = await fetchGear();
 
-let armors = [lightArmor, regenShield, heavyArmor, noneArmor];
+    for (let i = 0; i < gearData.length; i++) {
+        let armor = new Armor(
+            gearData[i].displayName,
+            gearData[i].displayIcon
+        );
+        armors.push(armor);
+    }
+
+}
+initGear();
 
 let players = [];
 
@@ -130,39 +142,6 @@ function pickArmor() {
 
 
 function loadAgents(player){
-    /*
-    let agentContainer = document.querySelector(".agent_selection");
-    agents.forEach(agent => {
-        if(selectedAgents.some(selectedAgent => selectedAgent.name === agent.name)) {
-            let agentDiv = document.createElement("article");
-            agentDiv.className = "agent";
-            agentDiv.innerHTML = `
-                    <div class="image" style="background-image:url(${agent.image})"></div>
-                    <p class="name">${agent.display_name}</p>
-                    <div class="checkbox-wrapper-10">
-                        <input class="tgl tgl-flip" id="${agent.name}_box" type="checkbox" checked value="${agent.name}"/>
-                        <label class="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" for="${agent.name}_box"></label>
-                    </div>
-            `;
-            agentContainer.appendChild(agentDiv);        
-        }
-        else{
-            let agentDiv = document.createElement("article");
-            agentDiv.className = "agent";
-            agentDiv.innerHTML = `
-                    <div class="image" style="background-image:url(${agent.image})"></div>
-                    <p class="name">${agent.display_name}</p>
-                    <div class="checkbox-wrapper-10">
-                        <input class="tgl tgl-flip" id="${agent.name}_box" type="checkbox" value="${agent.name}"/>
-                        <label class="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" for="${agent.name}_box"></label>
-                    </div>
-            `;
-            agentContainer.appendChild(agentDiv);  
-        }
-            
-
-    });
-    */
     let thisPlayerAgents = player.owned_agents;
     agents.forEach(agent => {
         if(thisPlayerAgents.some(thisPlayerAgents => thisPlayerAgents.name === agent.name)) {
@@ -170,7 +149,7 @@ function loadAgents(player){
             agentDiv.className = "agent";
             agentDiv.innerHTML = `
                     <div class="image" style="background-image:url(${agent.image})"></div>
-                    <p class="name">${agent.display_name}</p>
+                    <p class="name">${agent.name}</p>
                     <div class="checkbox-wrapper-10">
                         <input class="tgl tgl-flip" id="${agent.name}_box_player_${player.index}" type="checkbox" checked value="${agent.name}"/>
                         <label class="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" for="${agent.name}_box_player_${player.index}"></label>
@@ -183,7 +162,7 @@ function loadAgents(player){
             agentDiv.className = "agent";
             agentDiv.innerHTML = `
                     <div class="image" style="background-image:url(${agent.image})"></div>
-                    <p class="name">${agent.display_name}</p>
+                    <p class="name">${agent.name}</p>
                     <div class="checkbox-wrapper-10">
                         <input class="tgl tgl-flip" id="${agent.name}_box_player_${player.index}" type="checkbox" value="${agent.name}"/>
                         <label class="tgl-btn" data-tg-off="Nope" data-tg-on="Yeah!" for="${agent.name}_box_player_${player.index}"></label>
@@ -203,25 +182,6 @@ let loadoutContainer = document.querySelector(".allLoadouts");
 
 let generateBtn = document.querySelector("#generate_btn");
 generateBtn.addEventListener("click", () => {
-    /*
-    if(selectedAgents.length === 0) {
-        document.querySelector(".agent_amount_error").classList.remove("hidden");
-        return;
-    }
-    else {
-        document.querySelector(".agent_amount_error").classList.add("hidden");
-        let chosenAgent = pickAgent();
-        let chosenPrimary = pickPrimary();
-        let chosenSecondary = pickSecondary();
-        let  chosenArmor = pickArmor();
-        //let chosenLoadout = new Loadout(chosenAgent, chosenPrimary, chosenSecondary);
-        document.querySelector(".player1_agent_selection_step").classList.add("hidden");
-        let animation = document.querySelector(".loading_animation_inner");
-        document.querySelector(".generating_step").classList.remove("hidden");
-        requestAnimationFrame(() => {animation.style.width = "400px";});
-        setTimeout(() => {continueGeneration(chosenAgent, chosenPrimary, chosenSecondary, chosenArmor)}, 2000);
-        }
-        */
     let chosenAgents = [];
     for(let i = 0; i < players.length; i++) {
         let chosenAgent = pickAgent(players[i].owned_agents);
@@ -242,13 +202,12 @@ generateBtn.addEventListener("click", () => {
         document.querySelector(".generating_step").classList.remove("hidden");
         requestAnimationFrame(() => {animation.style.width = "400px";});
         document.querySelector(".summary_step").classList.add("hidden");
-        setTimeout(() => {continueGeneration(/*chosenAgent, chosenPrimary, chosenSecondary, chosenArmor*/)}, 2000);    
+        setTimeout(() => {continueGeneration()}, 2000);    
 });
 
 function resetLoadout() {
     document.querySelector(".player_selection_step").classList.remove("hidden");
     document.querySelector(".player_selection_step .container").classList.remove("hidden");
-    //document.querySelector(".player1_agent_selection_step").classList.remove("hidden");
     document.querySelector(".loadout_step").classList.add("hidden");
     loadoutContainer.innerHTML = "";
     document.querySelector("#saveAgents")
@@ -257,15 +216,9 @@ function resetLoadout() {
             players[i].owned_agents = agents;
         }
     }
-    /*
-    agentCheckboxes.forEach(checkbox => {
-        checkbox.checked = true;
-    });
-    */
     let animation = document.querySelector(".loading_animation_inner");
     animation.style.width = "0px";
     document.querySelector(".player1_agent_selection_step").innerHTML = "";
-    //document.querySelector(".summary_step").innerHTML = "";
     currentSelectedPlayer = 0;
     highestSelectedPlayer = 0;
     let summary = document.querySelector(".summary_step .header");
@@ -275,7 +228,7 @@ function resetLoadout() {
 let resetBtn = document.querySelector("#reset_btn");
 resetBtn.addEventListener("click", resetLoadout);
 
-function continueGeneration(/*chosenAgent, chosenPrimary, chosenSecondary, chosenArmor*/) {
+function continueGeneration() {
         document.querySelector(".generating_step").classList.add("hidden");
         document.querySelector(".loadout_step").classList.remove("hidden");
         for(let i = 0; i < players.length; i++) {
@@ -288,7 +241,7 @@ function continueGeneration(/*chosenAgent, chosenPrimary, chosenSecondary, chose
                     <h3>Agent</h3>
                     <div class="agent">
                         <div class="image" style="background-image:url(${players[i].loadout.agent.image})"></div>
-                        <p class="name">${players[i].loadout.agent.display_name}</p>
+                        <p class="name">${players[i].loadout.agent.name}</p>
                     </div>
             `;
             playerDiv.appendChild(agentDiv);
@@ -298,7 +251,7 @@ function continueGeneration(/*chosenAgent, chosenPrimary, chosenSecondary, chose
                     <h3>Primary</h3>
                     <div class="weapon">
                         <div class="image" style="background-image:url(${players[i].loadout.primary.image})"></div>
-                        <p class="name">${players[i].loadout.primary.display_name}</p>
+                        <p class="name">${players[i].loadout.primary.name}</p>
                     </div>
             `;
             playerDiv.appendChild(primaryDiv);
@@ -308,7 +261,7 @@ function continueGeneration(/*chosenAgent, chosenPrimary, chosenSecondary, chose
                     <h3>Secondary</h3>
                     <div class="weapon">
                         <div class="image" style="background-image:url(${players[i].loadout.secondary.image})"></div>
-                        <p class="name">${players[i].loadout.secondary.display_name}</p>
+                        <p class="name">${players[i].loadout.secondary.name}</p>
                     </div>
             `;
             playerDiv.appendChild(secondaryDiv);
@@ -320,7 +273,7 @@ function continueGeneration(/*chosenAgent, chosenPrimary, chosenSecondary, chose
                         <div class="image_background">
                             <div class="image" style="background-image:url(${players[i].loadout.armor.image});"></div>
                         </div>
-                        <p class="name">${players[i].loadout.armor.display_name}</p>
+                        <p class="name">${players[i].loadout.armor.name}</p>
                     </div>
             `;
             playerDiv.appendChild(armorDiv);   
@@ -406,7 +359,6 @@ nextBtn.addEventListener("click", () => {
                     document.querySelector(`#container${currentSelectedPlayer}`).classList.add("hidden");
                     document.querySelector(`.container:nth-child(${parseInt(back_btns[l].dataset.id) + 1})`).classList.add("hidden");
                     currentSelectedPlayer--;
-                    //document.querySelector(".player1_agent_selection_step").classList.remove("hidden");
                 }
                 });
             }
@@ -436,7 +388,7 @@ nextBtn.addEventListener("click", () => {
                             agentDiv.className = "agent_small";
                             agentDiv.innerHTML = `
                                 <div class="image_small" style="background-image:url(${players[i].owned_agents[j].image})"></div>
-                                <p class="name">${players[i].owned_agents[j].display_name}</p>
+                                <p class="name">${players[i].owned_agents[j].name}</p>
                             `;
                             summaryDiv.querySelector(".agents").appendChild(agentDiv);
                         }
@@ -452,7 +404,6 @@ nextBtn.addEventListener("click", () => {
                         checkAgents();
                     }
                     
-                    //document.querySelector(".player1_agent_selection_step").classList.remove("hidden");
                 }
                 });
             }     
@@ -468,17 +419,11 @@ function  checkAgents(){
                                 agentCheckboxes[k].addEventListener("change", (e) => {
                                     let agentName = e.target.value;
                                     if (e.target.checked) {
-                                        /*
-                                        for (let j = 0; j < agents.length; j++) {
-                                            if (agents[j].name === agentName) {
-                                                players[currentSelectedPlayer].owned_agents.push(agents[j]);
-                                            }}*/
                                         let selectedAgent = agents.find(agent => agent.name === agentName);
                                         if (selectedAgent && !players[currentSelectedPlayer].owned_agents.some(agent => agent.name === selectedAgent.name)) {
                                             players[currentSelectedPlayer].owned_agents.push(selectedAgent);
                                         }
                                     } else {
-                                        //players[currentSelectedPlayer].owned_agents = players[currentSelectedPlayer].owned_agents.filter(agent => agent.name !== agentName);
                                         players[currentSelectedPlayer].owned_agents = players[currentSelectedPlayer].owned_agents.filter(agent => agent.name !== agentName);
                                     }
                                 });
@@ -487,11 +432,8 @@ function  checkAgents(){
                 } 
 }
 
-
-
-
 /* ToDo:
-add ability generation
+- add ability generation
 
 
             let agentCheckboxes = document.querySelectorAll(`#container${i} .agent input[type='checkbox']`);
@@ -509,4 +451,8 @@ add ability generation
                     console.log(players[i].name, players[i].owned_agents);
                 });
             }
+
+- add unselect all agents button
+- add control check for enough agents for possible team combo
+
 */
