@@ -55,6 +55,10 @@ section{
     margin: 0 10%;
 }
 
+.name{
+    color: var(--sheep_white)
+}
+
 .agent{
     display: flex;
     flex-direction: column;
@@ -63,7 +67,7 @@ section{
     margin: 20px;
     padding: 20px;
     width: 200px;
-    background-color: var(--sheep_white);
+    background-color: var(--whale_blue);
 }
 
 .agent_small{
@@ -74,7 +78,7 @@ section{
     margin: 10px;
     padding: 10px;
     width: 100px;
-    background-color: var(--sheep_white);
+    background-color: var(--whale_blue);
 }
 
 .weapon{
@@ -85,7 +89,7 @@ section{
     margin: 20px;
     padding: 20px;
     width: 200px;
-    background-color: var(--sheep_white);
+    background-color: var(--whale_blue);
 }
 
 .armor{
@@ -96,7 +100,7 @@ section{
     margin: 20px;
     padding: 20px;
     width: 200px;
-    background-color: var(--sheep_white);
+    background-color: var(--whale_blue);
 }
 
 .image{
@@ -177,15 +181,17 @@ section{
 }
 
 .btn span{
-    position: relative;
-    left: 90px;
-    bottom: 35px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .small_btn span{
-    position: relative;
-    left: 15px;
-    bottom: 35px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .btn:hover .animation_div{
@@ -229,6 +235,18 @@ footer{
     color: var(--whale_blue);
     background-color: var(--just_white_transparent);
     padding: 0 10px;
+}
+
+footer .container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0px;
+}
+
+.footer p{
+    margin: 8px;
 }
 
 .loading{
