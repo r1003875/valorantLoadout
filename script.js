@@ -432,6 +432,19 @@ function  checkAgents(){
                 } 
 }
 
+fetch("https://api.github.com/repos/r1003875/valorantLoadout/commits/main")
+  .then(res => res.json())
+  .then(data => {
+    const date = new Date(data.commit.committer.date);
+    document.querySelector("#last_updated").textContent =
+      date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+  });
+
+
 /* ToDo:
 - add ability generation
 
